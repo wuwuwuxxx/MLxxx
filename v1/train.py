@@ -22,9 +22,9 @@ for v in range(k):
     assert val_idx < k
     val_idx = k_fold_idx[val_idx]
     val_idx = val_idx.astype(np.int32)
-    k_fold_idx = k_fold_idx[mask]
+    temp = k_fold_idx[mask]
     train_idx = np.array([])
-    for fold in k_fold_idx:
+    for fold in temp:
         train_idx = np.append(train_idx, fold)
     train_idx = train_idx.astype(np.int32)
     # read images
@@ -54,9 +54,10 @@ for v in range(k):
 
     ctx = mx.gpu()
     step = 32 * 8
-    train_data = mx.gluon.data.DataLoader(Isprs(images[train_idx], labels[train_idx], step, training=True),
-                                          batch_size=min(24, len(train_idx)), shuffle=True,
-                                          last_batch='rollover')
+    train_data = mx.gluon.data.DataLoader(
+        Isprs(images[train_idx], labels[train_idx], step, training=True, data_augumentation=True),
+        batch_size=min(24, len(train_idx)), shuffle=True,
+        last_batch='rollover')
     val_data = mx.gluon.data.DataLoader(Isprs(images[val_idx], labels[val_idx], step), batch_size=len(val_idx),
                                         last_batch='keep')
     net = Unet(6)

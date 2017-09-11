@@ -71,5 +71,6 @@ class MyTrainer(mx.gluon.Trainer):
                     break
         except KeyboardInterrupt:
             print('best validation accuracy is {}'.format(self._best_acc))
+            exit(0)
         except Exception:
             raise
