@@ -1,0 +1,4 @@
+*.npy
+*/ckpt
+*.pyc
+.idea/*

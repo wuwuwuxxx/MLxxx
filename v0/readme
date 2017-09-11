@@ -1,0 +1,9 @@
+trained with batchnorm
+cropsize 32*8
+batchsize min(24, train_idx)
+5 fold, first fold is validation
+learning rate 0.01
+epochs 10000
+
+
+
