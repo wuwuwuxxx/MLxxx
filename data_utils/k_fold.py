@@ -10,9 +10,9 @@ np.random.seed(1)
 def divide(permutation, k=5, labellist=None):
     """
     :param permutation: oneD array
-    :param k:
+    :param k: divided into k folds
     :param labellist: oneD array, index from 0
-    :return:
+    :return: divided permutations
     """
     if type(permutation) == list:
         permutation = np.array(permutation)

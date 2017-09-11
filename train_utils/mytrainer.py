@@ -5,7 +5,18 @@ from mxnet import nd, autograd
 
 class MyTrainer(mx.gluon.Trainer):
     def __init__(self, net=None, train_data_iter=None, val_data_iter=None, loss=None, ckpt_name='ckpt',
-                 ctx=mx.gpu(0), decay_epochs=10, do_ckpt_epochs=1, train_epochs=10000, **kwargs):
+                 ctx=mx.gpu(0), decay_epochs=10, do_ckpt_epochs=1, **kwargs):
+        """
+        :param net: a gluon network(block)
+        :param train_data_iter:
+        :param val_data_iter:
+        :param loss: loss function
+        :param ckpt_name: string
+        :param ctx: mxnet context
+        :param decay_epochs: if validation accuracy didn't change for decay_epochs, decay the learning rate
+        :param do_ckpt_epochs: save the check point every do_ckpt_epochs epochs
+        :param kwargs:
+        """
         super(MyTrainer, self).__init__(**kwargs)
         self._net = net
         self._train_data_iter = train_data_iter
@@ -16,12 +27,11 @@ class MyTrainer(mx.gluon.Trainer):
         self._decay_epochs = decay_epochs
         self._ckpt_name = ckpt_name
         self._loss = loss
-        self._train_epochs = train_epochs
         self._do_ckpt_epochs = do_ckpt_epochs
 
-    def evaluate_accuracy(self, data_iter):
+    def evaluate_accuracy(self):
         acc = mx.metric.Accuracy()
-        for i, (data, label) in enumerate(data_iter):
+        for i, (data, label) in enumerate(self._val_data_iter):
             data = data.as_in_context(self._ctx)
             label = label.as_in_context(self._ctx)
             output = self._net(data)
@@ -61,7 +71,7 @@ class MyTrainer(mx.gluon.Trainer):
                     moving_loss = (curr_loss if moving_loss is None else (1 - smoothing_constant) * moving_loss +
                                                                          (smoothing_constant) * curr_loss)
                 if e % self._do_ckpt_epochs == 0:
-                    test_accuracy = self.evaluate_accuracy(self._val_data_iter)
+                    test_accuracy = self.evaluate_accuracy()
                     print("Epoch {}. Loss: {}, Test_acc {}, Learning rate: {}".format(
                         e, moving_loss, test_accuracy, self.learning_rate))
                 else:

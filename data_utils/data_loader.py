@@ -7,6 +7,13 @@ from data_utils.image_preprocess import color_jit
 
 class Isprs(gluon.data.Dataset):
     def __init__(self, inputs, labels, cropsize, training=False, data_augumentation=False):
+        """
+        :param inputs: a list of numpy array
+        :param labels: a list of numpy array
+        :param cropsize: cropped image size, type int
+        :param training:
+        :param data_augumentation:
+        """
         assert len(inputs) == len(labels)
         if training:
             self._data = inputs

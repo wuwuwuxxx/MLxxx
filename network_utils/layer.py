@@ -2,6 +2,10 @@ from mxnet import gluon
 
 
 class Selu(gluon.HybridBlock):
+    """
+    selu activation from https://arxiv.org/abs/1706.02515
+    Self-Normalizing Neural Networks
+    """
     def __init__(self, **kwargs):
         super(Selu, self).__init__(**kwargs)
         with self.name_scope():
