@@ -6,7 +6,7 @@ from data_utils.image_preprocess import color_jit
 
 
 class Isprs(gluon.data.Dataset):
-    def __init__(self, inputs, labels, cropsize, training=False):
+    def __init__(self, inputs, labels, cropsize, training=False, data_augumentation=False):
         assert len(inputs) == len(labels)
         if training:
             self._data = inputs
@@ -16,6 +16,7 @@ class Isprs(gluon.data.Dataset):
             self._label = divide_img(labels, cropsize)
         self._step = cropsize
         self._training = training
+        self._data_augumentation = data_augumentation
 
     def __getitem__(self, item):
         d = self._data[item]
@@ -29,14 +30,16 @@ class Isprs(gluon.data.Dataset):
             c = np.random.randint(0, w - self._step - 1, dtype=np.int32)
             d = d[r:r + self._step, c:c + self._step, :]
             l = l[r:r + self._step, c:c + self._step]
-            # flip
-            if np.random.random() > 0.5:
-                d = np.fliplr(d)
-                l = np.fliplr(l)
-            if np.random.random() > 0.5:
-                d = np.flipud(d)
-                l = np.flipud(l)
-            d = color_jit(d)
+            if self._data_augumentation:
+                # flip
+                if np.random.random() > 0.5:
+                    d = np.fliplr(d)
+                    l = np.fliplr(l)
+                if np.random.random() > 0.5:
+                    d = np.flipud(d)
+                    l = np.flipud(l)
+                # color jit
+                d = color_jit(d)
         # normalization
         d = d.astype(np.float32)
         d /= 255.0

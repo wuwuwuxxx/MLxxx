@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def color_jit(img, h=0.05, s=0.05, v=0.15):
+def color_jit(img, h=0.05, s=0.05, v=0.1):
     # color jit
     hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV).astype(np.float32)
     hsv /= 255
