@@ -32,7 +32,7 @@ class MyTrainer(mx.gluon.Trainer):
     def evaluate_accuracy(self):
         val_acc = accuracy(self._val_data_iter, self._ctx, self._net)
         self._val_epoch += 1
-        if val_acc > self._best_acc:
+        if abs(val_acc - self._best_acc) >= 0.01:
             self._val_epoch = 0
             self._best_acc = val_acc
             self._net.save_params(self._ckpt_name)
