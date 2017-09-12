@@ -43,6 +43,7 @@ class MyTrainer(mx.gluon.Trainer):
         return val_acc
 
     def train(self):
+        self._net.hybridize()
         smoothing_constant = 0.01
         e = 0
         moving_loss = None
