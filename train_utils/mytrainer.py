@@ -3,6 +3,7 @@ import mxnet as mx
 from mxnet import nd, autograd
 from test_utils.metrics import accuracy
 
+
 class MyTrainer(mx.gluon.Trainer):
     def __init__(self, net=None, train_data_iter=None, val_data_iter=None, loss=None, ckpt_name='ckpt',
                  ctx=mx.gpu(0), decay_epochs=10, do_ckpt_epochs=1, **kwargs):
