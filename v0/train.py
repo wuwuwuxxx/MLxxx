@@ -55,7 +55,7 @@ for v in range(k):
     ctx = mx.gpu()
     step = 32 * 8
     train_data = mx.gluon.data.DataLoader(
-        Isprs(images[train_idx], labels[train_idx], step, training=True, data_augumentation=True),
+        Isprs(images[train_idx], labels[train_idx], step, training=True, data_augumentation=False),
         batch_size=min(24, len(train_idx)), shuffle=True,
         last_batch='rollover')
     val_data = mx.gluon.data.DataLoader(Isprs(images[val_idx], labels[val_idx], step), batch_size=len(val_idx),
