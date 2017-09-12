@@ -1,4 +1,10 @@
 *.npy
 */ckpt*
 *.pyc
-.idea/*
+.idea/
+data_utils/__pycache__/
+network_utils/__pycache__/
+test_utils/__pycache__/
+train_utils/__pycache__/
+v0/__pycache__/
+v1/__pycache__/
