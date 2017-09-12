@@ -6,9 +6,9 @@ import tifffile as tif
 import mxnet as mx
 
 from data_utils.data_loader import Isprs
-from v0.model import Unet
 from data_utils.k_fold import divide
 from train_utils.mytrainer import MyTrainer
+from v0.model import Unet
 
 root_path = '/media/xxx/Data/isprs/vaihingen'
 datalist = os.listdir(os.path.join(root_path, 'gts_for_participants'))

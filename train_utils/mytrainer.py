@@ -1,7 +1,7 @@
 import mxnet as mx
 
 from mxnet import nd, autograd
-
+from test_utils.metrics import accuracy
 
 class MyTrainer(mx.gluon.Trainer):
     def __init__(self, net=None, train_data_iter=None, val_data_iter=None, loss=None, ckpt_name='ckpt',
@@ -30,15 +30,8 @@ class MyTrainer(mx.gluon.Trainer):
         self._do_ckpt_epochs = do_ckpt_epochs
 
     def evaluate_accuracy(self):
-        acc = mx.metric.Accuracy()
-        for i, (data, label) in enumerate(self._val_data_iter):
-            data = data.as_in_context(self._ctx)
-            label = label.as_in_context(self._ctx)
-            output = self._net(data)
-            predictions = nd.argmax(output, axis=1)
-            acc.update(preds=predictions, labels=label)
+        val_acc = accuracy(self._val_data_iter, self._ctx, self._net)
         self._val_epoch += 1
-        val_acc = acc.get()[1]
         if val_acc > self._best_acc:
             self._val_epoch = 0
             self._best_acc = val_acc
@@ -84,3 +77,6 @@ class MyTrainer(mx.gluon.Trainer):
             exit(0)
         except Exception:
             raise
+        else:
+            with open('{}_val_acc.log'.format(self._ckpt_name)) as f:
+                f.write('best validation accuracy is {}'.format(self._best_acc))

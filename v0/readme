@@ -4,6 +4,10 @@ batchsize min(24, train_idx)
 5 fold, first fold is validation
 learning rate 0.01
 epochs 10000
-
+0.845891825358 val 0
+None val 1
+None val 2
+None val 3
+None val 4
 
 
