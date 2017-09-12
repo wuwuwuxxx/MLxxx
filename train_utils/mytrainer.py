@@ -40,7 +40,6 @@ class MyTrainer(mx.gluon.Trainer):
         if self._val_epoch == self._decay_epochs:
             self.set_learning_rate(self.learning_rate / 2)
             print('set learning rate to {}'.format(self.learning_rate))
-            # self._net.load_params(self._ckpt_name)
         return val_acc
 
     def train(self):
@@ -72,7 +71,7 @@ class MyTrainer(mx.gluon.Trainer):
                 else:
                     print("Epoch %s. Loss: %s" % (e, moving_loss))
                 e += 1
-                if self.learning_rate < 1e-5:
+                if self.learning_rate < 1e-7:
                     break
         except KeyboardInterrupt:
             print('best validation accuracy is {}'.format(self._best_acc))
