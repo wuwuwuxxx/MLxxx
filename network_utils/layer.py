@@ -61,7 +61,7 @@ class ResBlock(gluon.HybridBlock):
         x = self.conv1(x)
         x = self.conv2(x)
         if x.shape == x0.shape:
-            x += x0
+            x = x0 + x
         return F.LeakyReLU(data=x, slope=0.25, act_type='leaky')
 
 
@@ -79,7 +79,7 @@ class ResBlockBottleNeck(gluon.HybridBlock):
         x = self.conv2(x)
         x = self.conv3(x)
         if x.shape == x0.shape:
-            x += x0
+            x = x0 + x
         return F.LeakyReLU(data=x, slope=0.25, act_type='leaky')
 
 
@@ -125,5 +125,9 @@ if __name__ == '__main__':
     print(f(x))
 
     f = ResBlocks(32, 3)
+    f.initialize(ctx=mx.cpu())
+    print(f(x))
+
+    f = ResBlocks(32, 3, bottleneck=True)
     f.initialize(ctx=mx.cpu())
     print(f(x))
