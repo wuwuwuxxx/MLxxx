@@ -1,3 +1,4 @@
+import sys
 import os
 import glob
 
@@ -8,8 +9,10 @@ import mxnet as mx
 from data_utils.data_loader import Isprs
 from data_utils.k_fold import divide
 from train_utils.mytrainer import MyTrainer
+
+sys.path.insert(0, os.getcwd())
 ##################################################################################
-from v0.model import Unet  # change v0 here for different model
+from model import Unet
 ##################################################################################
 
 root_path = '/media/xxx/Data/isprs/vaihingen'
@@ -55,9 +58,9 @@ for v in range(k):
         labels = np.load('../labels.npy')
 
     ctx = mx.gpu()
-    step = 32 * 8
+    step = 32 * 7
     train_data = mx.gluon.data.DataLoader(
-        Isprs(images[train_idx], labels[train_idx], step, training=True, data_augumentation=False),
+        Isprs(images[train_idx], labels[train_idx], step, training=True, data_augumentation=True),
         batch_size=min(24, len(train_idx)), shuffle=True,
         last_batch='rollover')
     val_data = mx.gluon.data.DataLoader(Isprs(images[val_idx], labels[val_idx], step), batch_size=8,
@@ -71,11 +74,11 @@ for v in range(k):
         net.collect_params().initialize(init=mx.init.MSRAPrelu('in'), ctx=ctx)
 
     softmax_loss = mx.gluon.loss.SoftmaxCELoss(axis=1)
-    lr = 0.001
+    lr = 1e-4
     print('learning rate {}'.format(lr))
 
     trainer = MyTrainer(params=net.collect_params(), optimizer='adam',
                         optimizer_params={'learning_rate': lr, 'wd': 0.0001},
                         net=net, train_data_iter=train_data, val_data_iter=val_data, loss=softmax_loss,
-                        ckpt_name=ckpt_name, ctx=ctx, do_ckpt_epochs=100)
+                        ckpt_name=ckpt_name, ctx=ctx, do_ckpt_epochs=100, decay_epochs=20)
     trainer.train()
