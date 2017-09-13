@@ -1,4 +1,5 @@
 *.npy
+*.tif
 */ckpt*
 *.pyc
 .idea/
@@ -8,3 +9,4 @@ test_utils/__pycache__/
 train_utils/__pycache__/
 v0/__pycache__/
 v1/__pycache__/
+v0/results/
