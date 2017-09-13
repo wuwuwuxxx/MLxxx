@@ -45,8 +45,8 @@ class Isprs(gluon.data.Dataset):
                 if np.random.random() > 0.5:
                     d = np.flipud(d)
                     l = np.flipud(l)
-                # color jit
-                d = color_jit(d)
+                    # # color jit
+                    # d = color_jit(d)
         # normalization
         d = d.astype(np.float32)
         d /= 255.0
