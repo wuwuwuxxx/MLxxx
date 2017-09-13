@@ -71,7 +71,7 @@ class MyTrainer(mx.gluon.Trainer):
                 else:
                     print("Epoch %s. Loss: %s" % (e, moving_loss))
                 e += 1
-                if self.learning_rate < 1e-7:
+                if self.learning_rate < 1e-6:
                     break
         except KeyboardInterrupt:
             print('best validation accuracy is {}'.format(self._best_acc))
